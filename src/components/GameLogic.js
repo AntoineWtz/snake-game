@@ -1,13 +1,13 @@
-// GameLogic.js
 import React, { useState, useEffect } from 'react';
 
-const GameLogic = ({ generateFood }) => {
-  const [snake, setSnake] = useState([{ x: 10, y: 10 }]);
+const GameLogic = ({ generateFood, initialSnake }) => {
+  const [snake, setSnake] = useState(initialSnake);
   const [food, setFood] = useState(generateFood());
   const [direction, setDirection] = useState('RIGHT');
   const [score, setScore] = useState(0);
   const [speed, setSpeed] = useState(100);
   const [gameOver, setGameOver] = useState(false);
+  const [prevSnake, setPrevSnake] = useState(initialSnake);
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -59,13 +59,11 @@ const GameLogic = ({ generateFood }) => {
             break;
         }
 
-        // Check collision with walls
         if (newHead.x < 0 || newHead.x >= 20 || newHead.y < 0 || newHead.y >= 20) {
           setGameOver(true);
           return prevSnake;
         }
 
-        // Check collision with itself
         if (newSnake.slice(1).some(part => part.x === newHead.x && part.y === newHead.y)) {
           setGameOver(true);
           return prevSnake;
@@ -75,6 +73,7 @@ const GameLogic = ({ generateFood }) => {
         if (newHead.x === food.x && newHead.y === food.y) {
           setScore(score + 1);
           setFood(generateFood());
+          setSpeed(speed - 5);
         } else {
           newSnake.pop();
         }
@@ -92,9 +91,9 @@ const GameLogic = ({ generateFood }) => {
   }, [direction, food, generateFood, score, speed]);
 
   return (
-    <div>
+    <div className="GameLogic">
       <p>Score: {score}</p>
-      {gameOver && <p>Game Over</p>}
+      {gameOver && <p className="GameOver">Game Over</p>}
     </div>
   );
 };
