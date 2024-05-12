@@ -1,15 +1,11 @@
-// App.js
-import './App.css';
+import React from 'react';
 import SnakeGame from './components/SnakeGame';
+import './App.css';
 
 function App() {
-  const generateFood = () => {
-    return { x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20) };
-  };
-
   return (
     <div className="App">
-      <SnakeGame generateFood={generateFood} />
+      <SnakeGame />
     </div>
   );
 }
