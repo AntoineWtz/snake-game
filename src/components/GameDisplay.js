@@ -1,5 +1,4 @@
 // GameDisplay.js
-
 import React from 'react';
 
 const GameDisplay = ({ snake, food }) => {
