@@ -1,6 +1,6 @@
 # Snake Game
 
-
+There is a little snake game built in React.
 
 ## Available Scripts
 
