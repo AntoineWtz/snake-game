@@ -1,15 +1,29 @@
 // Controls.js
-import React from 'react';
+import React, { useEffect } from 'react';
 
-function Controls({ changeDirection }) {
-    return (
-        <div className="controls">
-            <button onClick={() => changeDirection('ArrowLeft')}>Left</button>
-            <button onClick={() => changeDirection('ArrowUp')}>Up</button>
-            <button onClick={() => changeDirection('ArrowRight')}>Right</button>
-            <button onClick={() => changeDirection('ArrowDown')}>Down</button>
-        </div>
-    );
+function Controls() {
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            switch (event.key) {
+                case 'ArrowUp':
+                case 'ArrowDown':
+                case 'ArrowLeft':
+                case 'ArrowRight':
+                    document.dispatchEvent(new CustomEvent('changeDirection', { detail: event.key }));
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    return null;
 }
 
 export default Controls;

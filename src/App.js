@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+// App.js
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import GameDetails from './components/GameDetails';
 import PlayBoard from './components/PlayBoard';
@@ -13,7 +14,6 @@ function App() {
   const [snake, setSnake] = useState([[5, 5]]);
   const [velocityX, setVelocityX] = useState(0);
   const [velocityY, setVelocityY] = useState(0);
-  const [intervalId, setIntervalId] = useState(null);
 
   useEffect(() => {
     const savedHighScore = localStorage.getItem('high-score');
@@ -24,10 +24,8 @@ function App() {
     const moveSnake = () => {
       if (gameOver) return handleGameOver();
       let newSnake = [...snake];
-      let snakeX = newSnake[0][0];
-      let snakeY = newSnake[0][1];
-      snakeX += velocityX;
-      snakeY += velocityY;
+      let snakeX = newSnake[0][0] + velocityX;
+      let snakeY = newSnake[0][1] + velocityY;
 
       if (
         snakeX < 1 ||
@@ -43,6 +41,7 @@ function App() {
       newSnake.unshift([snakeX, snakeY]);
       if (snakeX === foodX && snakeY === foodY) {
         setScore(score + 1);
+        updateFoodPosition();
       } else {
         newSnake.pop();
       }
@@ -50,51 +49,12 @@ function App() {
     };
 
     const id = setInterval(moveSnake, 100);
-    setIntervalId(id);
     return () => clearInterval(id);
   }, [gameOver, snake, foodX, foodY, score, velocityX, velocityY]);
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key.startsWith('Arrow')) {
-        startGame();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
-
-  useEffect(() => {
-    updateFoodPosition();
-  }, [score]);
-
-  const startGame = () => {
-    setVelocityX(1);
-  };
-
-  const updateFoodPosition = () => {
-    setFoodX(Math.floor(Math.random() * 30) + 1);
-    setFoodY(Math.floor(Math.random() * 30) + 1);
-  };
-
-  const handleGameOver = () => {
-    clearInterval(intervalId);
-    setGameOver(true);
-    alert('Game Over! Press OK to replay...');
-    setSnake([[5, 5]]);
-    setVelocityX(0);
-    setVelocityY(0);
-    setScore(0);
-    updateFoodPosition();
-  };
-
-  const changeDirection = (key) => {
-    if (!gameOver) {
-      switch (key) {
+    const handleDirectionChange = (event) => {
+      switch (event.detail) {
         case 'ArrowUp':
           if (velocityY !== 1) {
             setVelocityX(0);
@@ -122,21 +82,43 @@ function App() {
         default:
           break;
       }
-    } else {
-      // Si le jeu est terminé et qu'une touche directionnelle est pressée,
-      // redémarre le jeu
-      if (key.startsWith('Arrow')) {
-        startGame();
-      }
-    }
+    };
+
+    document.addEventListener('changeDirection', handleDirectionChange);
+
+    return () => {
+      document.removeEventListener('changeDirection', handleDirectionChange);
+    };
+  }, [velocityX, velocityY]);
+
+  useEffect(() => {
+    updateFoodPosition();
+  }, [score]);
+
+  const updateFoodPosition = () => {
+    setFoodX(Math.floor(Math.random() * 30) + 1);
+    setFoodY(Math.floor(Math.random() * 30) + 1);
   };
 
+  const handleGameOver = () => {
+    const savedHighScore = localStorage.getItem('high-score');
+    const parsedHighScore = savedHighScore ? parseInt(savedHighScore) : 0;
+    const newHighScore = Math.max(parsedHighScore, score);
+    setHighScore(newHighScore);
+    localStorage.setItem('high-score', newHighScore.toString());
+    setScore(0);
+    setGameOver(false);
+    setSnake([[5, 5]]);
+    setVelocityX(0);
+    setVelocityY(0);
+    updateFoodPosition();
+  };
 
   return (
     <div className="wrapper">
       <GameDetails score={score} highScore={highScore} />
       <PlayBoard snake={snake} foodX={foodX} foodY={foodY} />
-      <Controls changeDirection={changeDirection} />
+      <Controls />
     </div>
   );
 }
