@@ -1,7 +1,7 @@
 // Controls.js
 import React, { useEffect } from 'react';
 
-function Controls() {
+function Controls({ changeDirection }) {
     useEffect(() => {
         const handleKeyDown = (event) => {
             switch (event.key) {
@@ -9,7 +9,7 @@ function Controls() {
                 case 'ArrowDown':
                 case 'ArrowLeft':
                 case 'ArrowRight':
-                    document.dispatchEvent(new CustomEvent('changeDirection', { detail: event.key }));
+                    changeDirection(event.key);
                     break;
                 default:
                     break;
@@ -17,11 +17,10 @@ function Controls() {
         };
 
         document.addEventListener('keydown', handleKeyDown);
-
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, []);
+    }, [changeDirection]);
 
     return null;
 }
