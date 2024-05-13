@@ -20,22 +20,33 @@ function App() {
     if (savedHighScore) {
       setHighScore(parseInt(savedHighScore));
     }
+
     const id = setInterval(moveSnake, 100);
     setIntervalId(id);
     return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      changeDirection(e.key);
+    const handleKeyDown = (event) => {
+      if (event.key.startsWith('Arrow')) {
+        startGame();
+      }
     };
+
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   useEffect(() => {
     updateFoodPosition();
   }, [score]);
+
+  const startGame = () => {
+    setVelocityX(1);
+  };
 
   const updateFoodPosition = () => {
     setFoodX(Math.floor(Math.random() * 30) + 1);
