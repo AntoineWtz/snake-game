@@ -13,14 +13,16 @@ function App() {
   const [snake, setSnake] = useState([[5, 5]]);
   const [velocityX, setVelocityX] = useState(0);
   const [velocityY, setVelocityY] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
 
   useEffect(() => {
     const savedHighScore = localStorage.getItem('high-score');
     if (savedHighScore) {
       setHighScore(parseInt(savedHighScore));
     }
-    const intervalId = setInterval(moveSnake, 100);
-    return () => clearInterval(intervalId);
+    const id = setInterval(moveSnake, 100);
+    setIntervalId(id);
+    return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
@@ -41,9 +43,14 @@ function App() {
   };
 
   const handleGameOver = () => {
-    clearInterval();
+    clearInterval(intervalId);
+    setGameOver(true);
     alert('Game Over! Press OK to replay...');
-    window.location.reload();
+    setSnake([[5, 5]]);
+    setVelocityX(0);
+    setVelocityY(0);
+    setScore(0);
+    updateFoodPosition();
   };
 
   const changeDirection = (key) => {
