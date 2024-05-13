@@ -8,102 +8,93 @@ function App() {
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
-  const [snakeBody, setSnakeBody] = useState([[5, 5]]);
-  const [foodPosition, setFoodPosition] = useState([10, 10]); // Initial food position
-  const [direction, setDirection] = useState('right');
+  const [foodX, setFoodX] = useState(10);
+  const [foodY, setFoodY] = useState(10);
+  const [snake, setSnake] = useState([[5, 5]]);
+  const [velocityX, setVelocityX] = useState(0);
+  const [velocityY, setVelocityY] = useState(0);
 
   useEffect(() => {
-    // Load high score from local storage on component mount
     const savedHighScore = localStorage.getItem('high-score');
     if (savedHighScore) {
       setHighScore(parseInt(savedHighScore));
     }
-    // Start the game loop
     const intervalId = setInterval(moveSnake, 100);
-    return () => clearInterval(intervalId); // Cleanup on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
-  // Update high score in local storage and state
-  const updateHighScore = (newHighScore) => {
-    setHighScore(newHighScore);
-    localStorage.setItem('high-score', newHighScore);
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      changeDirection(e.key);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    updateFoodPosition();
+  }, [score]);
+
+  const updateFoodPosition = () => {
+    setFoodX(Math.floor(Math.random() * 30) + 1);
+    setFoodY(Math.floor(Math.random() * 30) + 1);
   };
 
-  // Function to move the snake
-  const moveSnake = () => {
-    if (gameOver) return;
-    const newSnake = [...snakeBody];
-    const head = newSnake[newSnake.length - 1];
-    let newHead;
+  const handleGameOver = () => {
+    clearInterval();
+    alert('Game Over! Press OK to replay...');
+    window.location.reload();
+  };
 
-    // Move the head in the current direction
-    switch (direction) {
-      case 'up':
-        newHead = [head[0] - 1, head[1]];
-        break;
-      case 'down':
-        newHead = [head[0] + 1, head[1]];
-        break;
-      case 'left':
-        newHead = [head[0], head[1] - 1];
-        break;
-      case 'right':
-        newHead = [head[0], head[1] + 1];
-        break;
-      default:
-        break;
+  const changeDirection = (key) => {
+    if (key === 'ArrowUp' && velocityY !== 1) {
+      setVelocityX(0);
+      setVelocityY(-1);
+    } else if (key === 'ArrowDown' && velocityY !== -1) {
+      setVelocityX(0);
+      setVelocityY(1);
+    } else if (key === 'ArrowLeft' && velocityX !== 1) {
+      setVelocityX(-1);
+      setVelocityY(0);
+    } else if (key === 'ArrowRight' && velocityX !== -1) {
+      setVelocityX(1);
+      setVelocityY(0);
     }
+  };
 
-    // Check for collisions
+  const moveSnake = () => {
+    if (gameOver) return handleGameOver();
+    let newSnake = [...snake];
+    let snakeX = newSnake[0][0];
+    let snakeY = newSnake[0][1];
+    snakeX += velocityX;
+    snakeY += velocityY;
+
     if (
-      newHead[0] < 1 ||
-      newHead[0] > 30 ||
-      newHead[1] < 1 ||
-      newHead[1] > 30 ||
-      newSnake.some(part => part[0] === newHead[0] && part[1] === newHead[1])
+      snakeX < 1 ||
+      snakeX > 30 ||
+      snakeY < 1 ||
+      snakeY > 30 ||
+      newSnake.slice(1).some(([x, y]) => x === snakeX && y === snakeY)
     ) {
       setGameOver(true);
       return;
     }
 
-    // Check if the snake eats the food
-    if (newHead[0] === foodPosition[0] && newHead[1] === foodPosition[1]) {
+    newSnake.unshift([snakeX, snakeY]);
+    if (snakeX === foodX && snakeY === foodY) {
       setScore(score + 1);
-      if (score + 1 > highScore) {
-        updateHighScore(score + 1);
-      }
-      generateFoodPosition(newSnake);
     } else {
-      newSnake.shift(); // Remove the tail if not eating food
+      newSnake.pop();
     }
-
-    newSnake.push(newHead);
-    setSnakeBody(newSnake);
-  };
-
-  // Function to generate a random food position
-  const generateFoodPosition = (snake) => {
-    let x, y;
-    do {
-      x = Math.floor(Math.random() * 30) + 1;
-      y = Math.floor(Math.random() * 30) + 1;
-    } while (snake.some(part => part[0] === x && part[1] === y));
-    setFoodPosition([x, y]);
-  };
-
-  // Function to handle changing direction
-  const handleDirectionChange = (newDirection) => {
-    setDirection(newDirection);
+    setSnake(newSnake);
   };
 
   return (
-    <div>
-      <h1>Snake Game</h1>
-      <div className="wrapper">
-        <GameDetails score={score} highScore={highScore} />
-        <PlayBoard snakeBody={snakeBody} foodPosition={foodPosition} />
-        <Controls changeDirection={handleDirectionChange} />
-      </div>
+    <div className="wrapper">
+      <GameDetails score={score} highScore={highScore} />
+      <PlayBoard snake={snake} foodX={foodX} foodY={foodY} />
+      <Controls changeDirection={changeDirection} />
     </div>
   );
 }

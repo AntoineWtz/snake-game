@@ -1,21 +1,22 @@
+// PlayBoard.js
 import React from 'react';
 
-function PlayBoard({ snakeBody, foodPosition }) {
-    const board = [];
-    for (let row = 1; row <= 30; row++) {
-        for (let col = 1; col <= 30; col++) {
-            const isSnakePart = snakeBody.some(part => part[0] === row && part[1] === col);
-            const isFood = foodPosition[0] === row && foodPosition[1] === col;
-            let cellClassName = '';
-            if (isSnakePart) {
-                cellClassName = 'head';
-            } else if (isFood) {
-                cellClassName = 'food';
-            }
-            board.push(<div key={`${row}-${col}`} className={cellClassName}></div>);
-        }
-    }
-    return <div className="play-board">{board}</div>;
+function PlayBoard({ snake, foodX, foodY }) {
+  return (
+    <div className="play-board">
+      {[...Array(30)].map((_, row) => (
+        [...Array(30)].map((_, col) => {
+          let cellClass = '';
+          if (snake.some(([x, y]) => x === row + 1 && y === col + 1)) {
+            cellClass = 'head';
+          } else if (foodX === row + 1 && foodY === col + 1) {
+            cellClass = 'food';
+          }
+          return <div key={`${row}-${col}`} className={cellClass}></div>;
+        })
+      ))}
+    </div>
+  );
 }
 
 export default PlayBoard;
