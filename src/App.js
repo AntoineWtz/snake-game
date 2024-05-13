@@ -93,20 +93,44 @@ function App() {
   };
 
   const changeDirection = (key) => {
-    if (key === 'ArrowUp' && velocityY !== 1) {
-      setVelocityX(0);
-      setVelocityY(-1);
-    } else if (key === 'ArrowDown' && velocityY !== -1) {
-      setVelocityX(0);
-      setVelocityY(1);
-    } else if (key === 'ArrowLeft' && velocityX !== 1) {
-      setVelocityX(-1);
-      setVelocityY(0);
-    } else if (key === 'ArrowRight' && velocityX !== -1) {
-      setVelocityX(1);
-      setVelocityY(0);
+    if (!gameOver) {
+      switch (key) {
+        case 'ArrowUp':
+          if (velocityY !== 1) {
+            setVelocityX(0);
+            setVelocityY(-1);
+          }
+          break;
+        case 'ArrowDown':
+          if (velocityY !== -1) {
+            setVelocityX(0);
+            setVelocityY(1);
+          }
+          break;
+        case 'ArrowLeft':
+          if (velocityX !== 1) {
+            setVelocityX(-1);
+            setVelocityY(0);
+          }
+          break;
+        case 'ArrowRight':
+          if (velocityX !== -1) {
+            setVelocityX(1);
+            setVelocityY(0);
+          }
+          break;
+        default:
+          break;
+      }
+    } else {
+      // Si le jeu est terminé et qu'une touche directionnelle est pressée,
+      // redémarre le jeu
+      if (key.startsWith('Arrow')) {
+        startGame();
+      }
     }
   };
+
 
   return (
     <div className="wrapper">
