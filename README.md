@@ -2,6 +2,10 @@
 
 Here's a little snake game built in React.
 
+## Demo
+
+https://antoinewtz.github.io/snake-game/
+
 ## Available Scripts
 
 In the project directory, you can run:
