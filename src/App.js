@@ -22,25 +22,25 @@ function App() {
     if (gameOver) return;
 
     switch (key) {
-      case 'ArrowUp':
+      case 'ArrowLeft':
         if (velocityY === 0) {
           setVelocityX(0);
           setVelocityY(-1);
         }
         break;
-      case 'ArrowDown':
+      case 'ArrowRight':
         if (velocityY === 0) {
           setVelocityX(0);
           setVelocityY(1);
         }
         break;
-      case 'ArrowLeft':
+      case 'ArrowUp':
         if (velocityX === 0) {
           setVelocityX(-1);
           setVelocityY(0);
         }
         break;
-      case 'ArrowRight':
+      case 'ArrowDown':
         if (velocityX === 0) {
           setVelocityX(1);
           setVelocityY(0);
@@ -78,7 +78,6 @@ function App() {
       if (score > highScore) {
         setHighScore(score);
       }
-      updateFoodPosition();
     };
 
     const moveSnake = () => {
@@ -105,7 +104,6 @@ function App() {
 
         if (newSnakeX === foodX && newSnakeY === foodY) {
           setScore((prevScore) => prevScore + 1);
-          updateFoodPosition();
         } else {
           newSnake.pop();
         }

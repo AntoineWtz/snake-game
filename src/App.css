@@ -25,7 +25,7 @@ body {
     justify-content: center;
     border-radius: 12px;
     background: #F9F8F8;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.23);
 }
 
 .game-details {
@@ -71,7 +71,10 @@ body {
 }
 
 .start-button {
+    width: 50%;
+    margin: 0 auto;
     margin-top: 20px;
+    margin-bottom: 20px;
     padding: 10px 20px;
     font-size: 1.2rem;
     color: white;
@@ -79,10 +82,12 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
 .start-button:hover {
     background-color: #1A503E;
+    transform: rotate(1.23deg);
 }
 
 .game-over-popup {
