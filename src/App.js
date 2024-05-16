@@ -3,6 +3,8 @@ import './App.css';
 import GameDetails from './components/GameDetails';
 import PlayBoard from './components/PlayBoard';
 import Controls from './components/Controls';
+import StartButton from './components/StartButton';
+import GameOverPopup from './components/GameOverPopup';
 
 function App() {
   const [score, setScore] = useState(0);
@@ -73,11 +75,6 @@ function App() {
     const handleGameOver = () => {
       setGameOver(true);
       setGameStarted(false);
-      alert('Game Over! Press OK to replay...');
-      setSnake([[5, 5]]);
-      setVelocityX(0);
-      setVelocityY(0);
-      setScore(0);
       if (score > highScore) {
         setHighScore(score);
       }
@@ -127,7 +124,7 @@ function App() {
     if (gameStarted) {
       updateFoodPosition();
     }
-  }, [score]);
+  }, [gameStarted, score]);
 
   const updateFoodPosition = () => {
     setFoodX(Math.floor(Math.random() * 30) + 1);
@@ -149,11 +146,8 @@ function App() {
       <GameDetails score={score} highScore={highScore} />
       <PlayBoard snake={snake} foodX={foodX} foodY={foodY} />
       <Controls changeDirection={changeDirection} />
-      {!gameStarted && (
-        <button onClick={startGame} className="start-button">
-          Start Game
-        </button>
-      )}
+      {!gameStarted && !gameOver && <StartButton startGame={startGame} />}
+      {gameOver && <GameOverPopup startGame={startGame} />}
     </div>
   );
 }

@@ -71,10 +71,7 @@ body {
 }
 
 .start-button {
-    width: 50%;
-    margin: 0 auto;
     margin-top: 20px;
-    margin-bottom: 20px;
     padding: 10px 20px;
     font-size: 1.2rem;
     color: white;
@@ -87,6 +84,44 @@ body {
 .start-button:hover {
     background-color: #1A503E;
 }
+
+.game-over-popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #F9F8F8;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.game-over-popup h2 {
+    margin-bottom: 10px;
+    color: #226F54;
+}
+
+.game-over-popup p {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    color: #22577A;
+}
+
+.restart-button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #226F54;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.restart-button:hover {
+    background-color: #1A503E;
+}
+
 
 
 @media screen and (max-width: 800px) {
