@@ -3,6 +3,10 @@ import './App.css';
 import GameDetails from './components/GameDetails';
 import PlayBoard from './components/PlayBoard';
 import Controls from './components/Controls';
+import StartButton from './components/StartButton';
+import GameOverPopup from './components/GameOverPopup';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
   const [score, setScore] = useState(0);
@@ -20,25 +24,25 @@ function App() {
     if (gameOver) return;
 
     switch (key) {
-      case 'ArrowUp':
+      case 'ArrowLeft':
         if (velocityY === 0) {
           setVelocityX(0);
           setVelocityY(-1);
         }
         break;
-      case 'ArrowDown':
+      case 'ArrowRight':
         if (velocityY === 0) {
           setVelocityX(0);
           setVelocityY(1);
         }
         break;
-      case 'ArrowLeft':
+      case 'ArrowUp':
         if (velocityX === 0) {
           setVelocityX(-1);
           setVelocityY(0);
         }
         break;
-      case 'ArrowRight':
+      case 'ArrowDown':
         if (velocityX === 0) {
           setVelocityX(1);
           setVelocityY(0);
@@ -73,15 +77,9 @@ function App() {
     const handleGameOver = () => {
       setGameOver(true);
       setGameStarted(false);
-      alert('Game Over! Press OK to replay...');
-      setSnake([[5, 5]]);
-      setVelocityX(0);
-      setVelocityY(0);
-      setScore(0);
       if (score > highScore) {
         setHighScore(score);
       }
-      updateFoodPosition();
     };
 
     const moveSnake = () => {
@@ -108,7 +106,7 @@ function App() {
 
         if (newSnakeX === foodX && newSnakeY === foodY) {
           setScore((prevScore) => prevScore + 1);
-          updateFoodPosition();
+          increaseSpeed();
         } else {
           newSnake.pop();
         }
@@ -117,17 +115,25 @@ function App() {
       });
     };
 
+    const increaseSpeed = () => {
+      if (score % 1.5 === 0) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = setInterval(moveSnake, 100 - (score * 4));
+      }
+    };
+
     if (gameStarted && !gameOver) {
       intervalRef.current = setInterval(moveSnake, 100);
       return () => clearInterval(intervalRef.current);
     }
   }, [gameOver, gameStarted, snake, foodX, foodY, score, highScore, velocityX, velocityY]);
 
+
   useEffect(() => {
     if (gameStarted) {
       updateFoodPosition();
     }
-  }, [score]);
+  }, [gameStarted, score]);
 
   const updateFoodPosition = () => {
     setFoodX(Math.floor(Math.random() * 30) + 1);
@@ -145,15 +151,16 @@ function App() {
   };
 
   return (
-    <div className="wrapper">
-      <GameDetails score={score} highScore={highScore} />
-      <PlayBoard snake={snake} foodX={foodX} foodY={foodY} />
-      <Controls changeDirection={changeDirection} />
-      {!gameStarted && (
-        <button onClick={startGame} className="start-button">
-          Start Game
-        </button>
-      )}
+    <div className='bloc-page'>
+      <Header />
+      <div className="wrapper">
+        <GameDetails score={score} highScore={highScore} />
+        <PlayBoard snake={snake} foodX={foodX} foodY={foodY} />
+        <Controls changeDirection={changeDirection} />
+        {!gameStarted && !gameOver && <StartButton startGame={startGame} />}
+        {gameOver && <GameOverPopup startGame={startGame} score={score} />}
+      </div>
+      <Footer />
     </div>
   );
 }
