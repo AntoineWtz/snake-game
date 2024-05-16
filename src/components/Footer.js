@@ -14,7 +14,7 @@ function Footer() {
                     <FontAwesomeIcon icon={faGithub} />
                 </a>
             </div>
-            <p>AntnWtz - 2024</p>
+            <a href='https://antoinewtz.github.io/portfolio-react/' className='portfolio-link'target='_blank' rel='noreferrer'>AntnWtz - 2024</a>
         </footer>
     );
 

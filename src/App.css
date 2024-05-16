@@ -147,11 +147,10 @@ body {
 
 .footer {
     text-align: center;
-    margin-top: 20px;
     color: #226F54;
 }
 
-.footer a {
+.footer .socials a {
     color: #226F54;
     text-decoration: none;
     padding: 0 5px;
@@ -161,9 +160,12 @@ body {
     color: #22577A;
 }
 
-.footer p {
+.footer a.portfolio-link {
+    color: #226F54;
+    text-decoration: none;
+    padding: 0 5px;
     font-weight: 300;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
 }
 
 @media screen and (max-width: 800px) {
