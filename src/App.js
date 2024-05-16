@@ -106,6 +106,7 @@ function App() {
 
         if (newSnakeX === foodX && newSnakeY === foodY) {
           setScore((prevScore) => prevScore + 1);
+          increaseSpeed();
         } else {
           newSnake.pop();
         }
@@ -114,11 +115,19 @@ function App() {
       });
     };
 
+    const increaseSpeed = () => {
+      if (score % 1.5 === 0) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = setInterval(moveSnake, 100 - (score * 4));
+      }
+    };
+
     if (gameStarted && !gameOver) {
       intervalRef.current = setInterval(moveSnake, 100);
       return () => clearInterval(intervalRef.current);
     }
   }, [gameOver, gameStarted, snake, foodX, foodY, score, highScore, velocityX, velocityY]);
+
 
   useEffect(() => {
     if (gameStarted) {
