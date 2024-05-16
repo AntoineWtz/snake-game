@@ -70,6 +70,25 @@ body {
     border-right: 1px solid #171B26;
 }
 
+.start-button {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #226F54;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.start-button:hover {
+    background-color: #1A503E;
+}
+
+
 @media screen and (max-width: 800px) {
     .wrapper {
         width: 90vmin;
