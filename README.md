@@ -1,6 +1,6 @@
 # Snake Game
 
-Here's a little snake game built in React.
+Here's a little snake game built in React. Use the arrow keys to move the snake and eat the food.
 
 ## Demo
 
