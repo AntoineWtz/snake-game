@@ -6,6 +6,7 @@ import Controls from './components/Controls';
 import StartButton from './components/StartButton';
 import GameOverPopup from './components/GameOverPopup';
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
   const [score, setScore] = useState(0);
@@ -141,13 +142,16 @@ function App() {
   };
 
   return (
-    <div className="wrapper">
+    <div className='bloc-page'>
       <Header />
-      <GameDetails score={score} highScore={highScore} />
-      <PlayBoard snake={snake} foodX={foodX} foodY={foodY} />
-      <Controls changeDirection={changeDirection} />
-      {!gameStarted && !gameOver && <StartButton startGame={startGame} />}
-      {gameOver && <GameOverPopup startGame={startGame} score={score} />}
+      <div className="wrapper">
+        <GameDetails score={score} highScore={highScore} />
+        <PlayBoard snake={snake} foodX={foodX} foodY={foodY} />
+        <Controls changeDirection={changeDirection} />
+        {!gameStarted && !gameOver && <StartButton startGame={startGame} />}
+        {gameOver && <GameOverPopup startGame={startGame} score={score} />}
+      </div>
+      <Footer />
     </div>
   );
 }
