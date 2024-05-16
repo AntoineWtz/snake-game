@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 function Controls({ changeDirection }) {
     useEffect(() => {
@@ -9,7 +9,6 @@ function Controls({ changeDirection }) {
                 case 'ArrowLeft':
                 case 'ArrowRight':
                     changeDirection(event.key);
-                    console.log(event.key);
                     break;
                 default:
                     break;

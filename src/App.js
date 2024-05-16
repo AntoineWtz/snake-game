@@ -5,6 +5,7 @@ import PlayBoard from './components/PlayBoard';
 import Controls from './components/Controls';
 import StartButton from './components/StartButton';
 import GameOverPopup from './components/GameOverPopup';
+import Header from './components/Header';
 
 function App() {
   const [score, setScore] = useState(0);
@@ -141,6 +142,7 @@ function App() {
 
   return (
     <div className="wrapper">
+      <Header />
       <GameDetails score={score} highScore={highScore} />
       <PlayBoard snake={snake} foodX={foodX} foodY={foodY} />
       <Controls changeDirection={changeDirection} />
