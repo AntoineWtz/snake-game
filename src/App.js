@@ -147,7 +147,7 @@ function App() {
       <PlayBoard snake={snake} foodX={foodX} foodY={foodY} />
       <Controls changeDirection={changeDirection} />
       {!gameStarted && !gameOver && <StartButton startGame={startGame} />}
-      {gameOver && <GameOverPopup startGame={startGame} />}
+      {gameOver && <GameOverPopup startGame={startGame} score={score} />}
     </div>
   );
 }
